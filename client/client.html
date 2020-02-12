@@ -7,6 +7,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
+    const handleResponse = (xhr) => {
+        const content = document.querySelector('#content');
+        
+        switch(xhr.status){
+            case 200:
+                content.innerHTML = `<b>Success</b>`;
+                break;
+            case 201:
+                content.innerHTML = `<b>Create</b>`;
+                break;
+            case 204:
+                content.innerHTML = `<b>Updated (No Content)</b>`;
+                break;
+            case 400:
+                content.innerHTML = `<b>Bad Request</b>`;
+                break;
+            case 404:
+                content.innerHTML = `<b>Resource Not Found</b>`;
+                break;
+            default:
+                content.innerHTML = `Error code not implemented by client`;
+                break;
+        }
+    };
+
   </script>
 </head>
 <body>
