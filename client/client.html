@@ -7,39 +7,99 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
-    const handleResponse = (xhr, parseResponse) => {
-        const content = document.querySelector('#content');
+/*
+    const parseJSON = (xhr, content) => {
+      const obj = JSON.parse(xhr.response);
+      console.dir(obj);
         
-        switch(xhr.status){
-            case 200:
-                content.innerHTML = `<b>Success</b>`;
-                break;
-            case 201:
-                content.innerHTML = `<b>Create</b>`;
-                break;
-            case 204:
-                content.innerHTML = `<b>Updated (No Content)</b>`;
-                break;
-            case 400:
-                content.innerHTML = `<b>Bad Request</b>`;
-                break;
-            case 404:
-                content.innerHTML = `<b>Resource Not Found</b>`;
-                break;
-            default:
-                content.innerHTML = `Error code not implemented by client`;
-                break;
-        }
-        
-        
-        if(parseResponse){
-            const obj = JSON.parse(xhr.response);
-            
-            content.innerHTML += `<p>${xhr.response}</p>`;
-        }else{
-            content.innerHTML += `<p>Meta Data Recieved</p>`;
-        }
+      if(obj.message) {
+        const p = document.createElement('p');
+        p.textContent = `Message: ${obj.message}`;
+        content.appendChild(p);
+      }
+      
+      if(obj.users) {
+        const userList = document.createElement('p');
+        const users = JSON.stringify(obj.users);
+        userList.textContent = users;
+        content.appendChild(userList);
+      }
     };
+*/
+    const handleResponse = (xhr, parseResponse) => {
+      const content = document.querySelector('#content');
+      
+      switch(xhr.status) {
+        case 200:
+          content.innerHTML = `<b>Success</b>`;
+          break;
+        case 201:
+          content.innerHTML = '<b>Create</b>';
+          break;
+        case 204:
+          content.innerHTML = '<b>Updated (No Content)</b>';
+          return;
+        case 400:
+          content.innerHTML = `<b>Bad Request</b>`;
+          break;
+        case 404:
+          content.innerHTML = `<b>Resource Not Found</b>`;
+          break;
+        default:
+          content.innerHTML = `Error code not implemented by client.`;
+          break;
+      }
+
+        
+     if(parseResponse){
+         
+         const obj = JSON.parse(xhr.response);
+         console.dir(obj);
+         // added .message to end of response
+         // content.innerHTML += `<p>${xhr.response.message}</p>`;
+         
+        if(obj.message) {
+            const p = document.createElement('p');
+            p.textContent = `Message: ${obj.message}`;
+            content.appendChild(p);
+        }
+      
+        if(obj.users) {
+            const userList = document.createElement('p');
+            const users = JSON.stringify(obj.users);
+            userList.textContent = users;
+            content.appendChild(userList);
+        }
+     }else{
+         // remove this
+         // content.innerHTML += '<p>Meta Data Recieved</p>';
+     }
+    };
+
+    const sendPost = (e, nameForm) => {
+      e.preventDefault();
+        
+      const nameAction = nameForm.getAttribute('action');
+      const nameMethod = nameForm.getAttribute('method');
+      
+      const nameField = nameForm.querySelector('#nameField');
+      const ageField = nameForm.querySelector('#ageField');
+      
+      const xhr = new XMLHttpRequest();
+        
+      xhr.open(nameMethod, nameAction);
+      
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader ('Accept', 'application/json');
+      
+      xhr.onload = () => handleResponse(xhr);
+      
+      const formData = `name=${nameField.value}&age=${ageField.value}`;
+      
+      xhr.send(formData);
+    
+      return false;
+    }
 
     const requestUpdate = (e, userForm) => {
         e.preventDefault();
@@ -67,10 +127,14 @@
 
     const init = () => {
         const userForm = document.querySelector('#userForm');
+        const nameForm = document.querySelector('#nameForm');
         
         const getUsers = (e) => requestUpdate(e, userForm);
+        const addUsers = (e) => sendPost(e, nameForm);
         
         userForm.addEventListener('submit', getUsers);
+        nameForm.addEventListener('submit', addUsers);
+        
     };
 
     window.onload = init;
