@@ -7,7 +7,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
-    const handleResponse = (xhr) => {
+    const handleResponse = (xhr, parseResponse) => {
         const content = document.querySelector('#content');
         
         switch(xhr.status){
@@ -30,7 +30,50 @@
                 content.innerHTML = `Error code not implemented by client`;
                 break;
         }
+        
+        
+        if(parseResponse){
+            const obj = JSON.parse(xhr.response);
+            
+            content.innerHTML += `<p>${xhr.response}</p>`;
+        }else{
+            content.innerHTML += `<p>Meta Data Recieved</p>`;
+        }
     };
+
+    const requestUpdate = (e, userForm) => {
+        e.preventDefault();
+        
+        const url = userForm.querySelector('#urlField').value;
+        
+        const method = userForm.querySelector('#methodSelect').value;
+        
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open(method, url);
+        
+        xhr.setRequestHeader('Accept', 'application/json');
+        
+        if(method == 'get'){
+            xhr.onload = () => handleResponse(xhr, true);
+        }else{
+            xhr.onload = () => handleResponse(xhr, false);
+        }
+        
+        xhr.send();
+        
+        return false;
+    };
+
+    const init = () => {
+        const userForm = document.querySelector('#userForm');
+        
+        const getUsers = (e) => requestUpdate(e, userForm);
+        
+        userForm.addEventListener('submit', getUsers);
+    };
+
+    window.onload = init;
 
   </script>
 </head>
