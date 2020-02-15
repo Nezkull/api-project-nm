@@ -7,25 +7,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
 
-/*
-    const parseJSON = (xhr, content) => {
-      const obj = JSON.parse(xhr.response);
-      console.dir(obj);
-        
-      if(obj.message) {
-        const p = document.createElement('p');
-        p.textContent = `Message: ${obj.message}`;
-        content.appendChild(p);
-      }
-      
-      if(obj.users) {
-        const userList = document.createElement('p');
-        const users = JSON.stringify(obj.users);
-        userList.textContent = users;
-        content.appendChild(userList);
-      }
-    };
-*/
     const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
       
@@ -50,14 +31,9 @@
           break;
       }
 
-        
-        
-        
      if(parseResponse){
         const obj = JSON.parse(xhr.response);
         console.dir(obj);
-         // added .message to end of response
-         // content.innerHTML += `<p>${xhr.response[0]}</p>`;
          
         if(obj.message) {
             const p = document.createElement('p');
@@ -73,11 +49,7 @@
         }
         
      }else{
-         /*
-         if(xhr.status === 201){
-            content.innerHTML += `<p>Message: ${obj.message}</p>`; 
-         }
-         */
+         
      }
     };
 
@@ -121,9 +93,7 @@
         
         if(method == 'get'){
             xhr.onload = () => handleResponse(xhr, true);
-        }/* else if(method == 'post'){
-          xhr.onload = () => handleResponse(xhr, true);  
-        }*/ else{
+        }else{
             xhr.onload = () => handleResponse(xhr, false);
         }
         

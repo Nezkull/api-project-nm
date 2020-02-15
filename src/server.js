@@ -57,33 +57,11 @@ const handleHead = (request, response, parsedURL) => {
   }
 };
 
-/*
-const urlStruct = {
-  GET: {
-    '/': htmlHandler.getIndex,
-    '/style.css': htmlHandler.getCSS,
-    '/getUsers': jsonHandler.getUsers,
-    // '/updateUser': jsonHandler.updateUser,
-    notFound: jsonHandler.notFound,
-  },
-  HEAD: {
-    '/getUsers': jsonHandler.getUsersMeta,
-    notFound: jsonHandler.getUsersMeta,
-  },
-};
-*/
 const onRequest = (request, response) => {
   console.log(request.url);
 
   const parsedURL = url.parse(request.url);
 
-  /*
-  if (urlStruct[request.method][parsedURL.pathname]) {
-    urlStruct[request.method][parsedURL.pathname](request, response);
-  } else {
-    urlStruct[request.method].notFound(request, response);
-  }
-  */
   if (request.method === 'POST') {
     handlePost(request, response, parsedURL);
   } else if (request.method === 'GET') {
