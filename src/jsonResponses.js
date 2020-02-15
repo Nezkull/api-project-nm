@@ -22,7 +22,7 @@ const getUsers = (request, response) => {
 const getUsersMeta = (request, response) => {
   respondJSONMeta(request, response, 200);
 };
-
+ 
 const addUser = (request, response, body) => {
   const responseJSON = {
     message: 'Name and age are both required.',
