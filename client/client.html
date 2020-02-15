@@ -51,12 +51,13 @@
       }
 
         
+        
+        
      if(parseResponse){
-         
-         const obj = JSON.parse(xhr.response);
-         console.dir(obj);
+        const obj = JSON.parse(xhr.response);
+        console.dir(obj);
          // added .message to end of response
-         // content.innerHTML += `<p>${xhr.response.message}</p>`;
+         // content.innerHTML += `<p>${xhr.response[0]}</p>`;
          
         if(obj.message) {
             const p = document.createElement('p');
@@ -70,9 +71,13 @@
             userList.textContent = users;
             content.appendChild(userList);
         }
+        
      }else{
-         // remove this
-         // content.innerHTML += '<p>Meta Data Recieved</p>';
+         /*
+         if(xhr.status === 201){
+            content.innerHTML += `<p>Message: ${obj.message}</p>`; 
+         }
+         */
      }
     };
 
@@ -92,7 +97,7 @@
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.setRequestHeader ('Accept', 'application/json');
       
-      xhr.onload = () => handleResponse(xhr);
+      xhr.onload = () => handleResponse(xhr, true);
       
       const formData = `name=${nameField.value}&age=${ageField.value}`;
       
@@ -116,7 +121,9 @@
         
         if(method == 'get'){
             xhr.onload = () => handleResponse(xhr, true);
-        }else{
+        }/* else if(method == 'post'){
+          xhr.onload = () => handleResponse(xhr, true);  
+        }*/ else{
             xhr.onload = () => handleResponse(xhr, false);
         }
         
