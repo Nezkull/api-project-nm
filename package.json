@@ -1,6 +1,9 @@
 {
   "name": "http-api-assignment-ii",
   "version": "1.0.0",
+    "engines": {
+        "node": "10.16.0",
+    }
   "description": "",
   "main": "./src/server.js",
   "scripts": {

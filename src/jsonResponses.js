@@ -29,7 +29,7 @@ const addUser = (request, response, body) => {
   };
 
   if (!body.name || !body.age) {
-    responseJSON.id = 'misingParams';
+    responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
