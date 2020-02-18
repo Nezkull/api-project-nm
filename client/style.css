@@ -25,6 +25,7 @@ input[type=text]{
     margin: 8px;
 }
 .statementField {
+    width: 40%;
 /*    text-align: center;*/
 /*    margin-left: 10px;*/
     
