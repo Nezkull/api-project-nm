@@ -10,6 +10,7 @@
     const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
       
+        // this needs change to thingys
       switch(xhr.status) {
         case 200:
           content.innerHTML = `<b>Success</b>`;
@@ -35,12 +36,14 @@
         const obj = JSON.parse(xhr.response);
         console.dir(obj);
          
+         // idk if I need this keep for now
         if(obj.message) {
             const p = document.createElement('p');
             p.textContent = `Message: ${obj.message}`;
             content.appendChild(p);
         }
       
+         // change from users to responses
         if(obj.users) {
             const userList = document.createElement('p');
             const users = JSON.stringify(obj.users);
@@ -49,18 +52,20 @@
         }
         
      }else{
-         
+         // nothing happens here
      }
     };
 
+    // update this to have multiple text fields
     const sendPost = (e, nameForm) => {
       e.preventDefault();
         
+        // these might be needed
       const nameAction = nameForm.getAttribute('action');
       const nameMethod = nameForm.getAttribute('method');
       
-      const nameField = nameForm.querySelector('#nameField');
-      const ageField = nameForm.querySelector('#ageField');
+      const nameField = nameForm.querySelector('#nameField'); // need this
+      const ageField = nameForm.querySelector('#ageField'); // dont need this here
       
       const xhr = new XMLHttpRequest();
         
@@ -78,6 +83,7 @@
       return false;
     }
 
+    // this needs much changing
     const requestUpdate = (e, userForm) => {
         e.preventDefault();
         
@@ -120,19 +126,46 @@
 </head>
 <body>
   <section id="top">
+      <!--   change the h3 tag text, maybe have it change based on if the user is uploading stuff or playing the game?   -->
     <h3>POST Status Code Tests</h3>
+<!--   This needs to be changed a bit   -->
     <form id="nameForm" action="/addUser" method="post">
       <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name" />
+      <input id="nameField" type="text" name="name" /><br>
+<!--
       <label for="age">Age: </label>
       <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+-->
+        <!--    These input elements are the entry fields for the statements.    -->
+        <label for="response1">Statement 1: </label>
+        <input id="resp1" type="text" name="response1" /><br>
+        
+        <label for="response2">Statement 2: </label>
+        <input id="resp2" type="text" name="response2" /><br>
+        
+        <label for="response3">Statement 3: </label>
+        <input id="resp3" type="text" name="response3" /><br>
+        
+        <label for="response4">Statement 4: </label>
+        <input id="resp4" type="text" name="response4" /><br>
+        
+        <!--     class="statementField"    -->
+        
+        <!--    This input element is used to decide which response is the lie.    -->
+        <label for="lie">Lie: </label>
+        <input id="lie" type="number" name="lie" min="0" max="3" step="1" />
+        
       <input type="submit" value="Add User" />
     </form>
+      
+      <!--   This needs to be changed to so that when option is changed posts are pulled from the server.   -->
     <form id="userForm" action="/getUsers" method="get">
       <select id='urlField'>
+<!--     these need to be changed, actually I don't think these are needed at all     -->
         <option value='/getUsers'>/getUsers</option>
         <option value='/notReal'>/notReal</option>
       </select>
+<!--    these need to be modified    -->
       <select id="methodSelect">
         <option value="get">GET</option>
         <option value="head">HEAD</option>

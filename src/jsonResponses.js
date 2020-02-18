@@ -1,4 +1,19 @@
-const users = {};
+// const users = {};
+const posts = {};
+
+// make it an object of objects
+// an object that contains all of the images in the media folder
+const images = {
+  bread: {
+    id: 'bread',
+    link: '../media/bread.png',
+  },
+  lamp: {
+    id: 'lamp',
+    link: '../media/lamp.png',
+  },
+
+};
 
 const respondJSON = (request, response, status, obj) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
@@ -11,6 +26,7 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
+// not really needed
 const getUsers = (request, response) => {
   const responseJSON = {
     users,
@@ -19,10 +35,37 @@ const getUsers = (request, response) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
+
+// function that will get the posts from the server
+const getPosts = (request, response, param) => {
+  const respondJSON = {
+    photo, // the image id
+    posts,
+  };
+    // this will probably need more work
+
+  /*
+    // check to see if parameter is set
+    if(!param.id){
+        // loop through all of the image objects
+        for(let i = 0; i < images.count; i++){
+            // logic check for if query param is not valid
+            if(param.id !== images[i].id){
+
+            }
+        }
+    }
+    */
+  return respondJSON(request, response, 200, responseJSON);
+};
+
+// I don't think I need to do XML or meta responses for this project
 const getUsersMeta = (request, response) => {
   respondJSONMeta(request, response, 200);
 };
- 
+
+// copy and modify this to allow for multiple responses. Params: request, response, body.
+// body has .resp1, .resp2, .resp3, .resp4, and .lie. the .resp[n] are strings, .lie is an int that must be between 0 & 4.
 const addUser = (request, response, body) => {
   const responseJSON = {
     message: 'Name and age are both required.',
@@ -52,6 +95,7 @@ const addUser = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
+// I might allow them to do this
 const updateUser = (request, response) => {
   const newUser = {
     createdAt: Date.now(),

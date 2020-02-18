@@ -19,3 +19,23 @@ html, body {
   font-size: 2em;
   text-align: center;
 }
+
+input[type=text]{
+    padding: 2px;
+    margin: 8px;
+}
+.statementField {
+/*    text-align: center;*/
+/*    margin-left: 10px;*/
+    
+/*    width: 50%;*/
+/*    height: 40px;*/
+/*  padding: 12px 20px;*/
+/*  margin: 8px 0;*/
+/*  display: inline-block;*/
+/*  border: 1px solid #ccc;*/
+/*  border-radius: 4px;*/
+/*  box-sizing: border-box;*/
+/* margin-right: 600px;   */
+}
+
