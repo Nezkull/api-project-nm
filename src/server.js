@@ -30,6 +30,26 @@ const handlePost = (request, response, parsedURL) => {
 
       jsonHandler.addUser(request, response, bodyParams);
     });
+  }else if(parsedURL.pathname === '/addPost'){
+      const res = response;
+      
+      const body = [];
+      
+      request.on('error', (err) => {
+          console.dir(err);
+          res.statusCode = 400;
+          res.end();
+      });
+      
+      request.on('data', (chunk) => {
+          body.push(chunk);
+      });
+      
+      request.on('end', () => {
+          const bodyString = Buffer.concat(body).toString();
+          const bodyParams = query.parse(bodyString);
+          jsonHandler.addPost(request, response, bodyParams);
+      });
   }
 };
 

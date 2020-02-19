@@ -39,7 +39,7 @@ const getUsers = (request, response) => {
 // function that will get the posts from the server
 const getPosts = (request, response, param) => {
   const respondJSON = {
-    photo, // the image id
+    // photo, // the image id
     posts,
   };
     // this will probably need more work
@@ -95,6 +95,40 @@ const addUser = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
+const addPost = (request, response, body) => {
+    const responseJSON = {
+        message: 'Name, 4 statements, and lie selection are all required.',
+    };
+    
+    if(!body.name || !body.resp1 || !body.resp2 || !body.resp3 || !body.resp4 || !body.lie){
+        responseJSON.id = 'missingParams';
+        return respondJSON(request, response, 400, responseJSON);
+    }
+    
+    let responseCode = 200;
+    
+    if(posts[body.name]){
+        responseCode = 204;
+    }else{
+        posts[body.name] = {};
+    }
+    
+    posts[body.name].name = body.name;
+    posts[body.name].resp1 = body.resp1;
+    posts[body.name].resp2 = body.resp2;
+    posts[body.name].resp3 = body.resp3;
+    posts[body.name].resp4 = body.resp4;
+    posts[body.name].lie = body.lie;
+    // need image selector thing as well
+    
+    if(responseCode === 201){
+        responseJSON.message = 'Created Successfully';
+        return respondJSON(request, response, responseCode, responseJSON);
+    }
+    
+    return respondJSONMeta(request, response, responseCode);
+}
+
 // I might allow them to do this
 const updateUser = (request, response) => {
   const newUser = {
@@ -126,4 +160,6 @@ module.exports = {
   updateUser,
   notFound,
   notFoundMeta,
+    getPosts,
+    addPost,
 };

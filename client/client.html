@@ -32,6 +32,7 @@
           break;
       }
 
+        
      if(parseResponse){
         const obj = JSON.parse(xhr.response);
         console.dir(obj);
@@ -92,12 +93,18 @@
         // get the name
         const nameField = nameForm.querySelector('#nameField');
         
+        console.dir(nameField); // gives correct readout
+        
         // get an array of all of the text responses
         const respFields = nameForm.getElementsByClassName('statementField');
         
+        console.dir(respFields); // gives correct readouts
+        console.dir(respFields[2]); // gives correct readout
         // get the lie input selector
         const lieSelector = nameForm.querySelector('#lie');
     
+        console.dir(lieSelector); // gives correct readout
+        
         const xhr = new XMLHttpRequest();
         
         // nameMethod needs to be changed in the html tag to be addPost instead of addUser
@@ -107,11 +114,11 @@
         xhr.setRequestHeader ('Accept', 'application/json');
         
         // handleResponse needs to be changed to accept any different parameters that I might need
-        xhr.onload = () => handleResponse(xhr);
+        xhr.onload = () => handleResponse(xhr, false);
         
         const formData = `name=${nameField.value}&resp1=${respFields[0].value}&resp2=${respFields[1].value}&resp3=${respFields[2].value}&resp4=${respFields[3].value}&lie=${lieSelector.value}`;
         xhr.send(formData);
-    }
+    };
     
     // this needs much changing
     const requestUpdate = (e, userForm) => {
@@ -138,17 +145,35 @@
         return false;
     };
 
-    
+    const requestPosts = (e, userForm) => {
+      e.preventDefault();
+        
+        const url = userForm.querySelector('#urlField').value;
+        const method = userForm.querySelector('#methodSelect').value;
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open(method, url);
+        
+        xhr.setRequestHeader('Accept', 'application/json');
+        
+        xhr.onload = () => handleResponse(xhr);
+        
+        xhr.send();
+        
+        return false;
+    };
 
     const init = () => {
         const userForm = document.querySelector('#userForm');
         const nameForm = document.querySelector('#nameForm');
         
         const getUsers = (e) => requestUpdate(e, userForm);
-        const addUsers = (e) => sendPost(e, nameForm);
+        // const addUsers = (e) => sendPost(e, nameForm);
+        const addPost = (e) => postSubmission(e, nameForm);
         
         userForm.addEventListener('submit', getUsers);
-        nameForm.addEventListener('submit', addUsers);
+        // nameForm.addEventListener('submit', addUsers);
+        nameForm.addEventListener('submit', addPost);
         
     };
 
@@ -161,7 +186,7 @@
       <!--   change the h3 tag text, maybe have it change based on if the user is uploading stuff or playing the game?   -->
     <h3>POST Status Code Tests</h3>
 <!--   This needs to be changed a bit, action needs to be changed to something else   -->
-    <form id="nameForm" action="/addUser" method="post">
+    <form id="nameForm" action="/addPost" method="post">
       <label for="name">Name: </label>
       <input id="nameField" type="text" name="name" /><br>
 <!--
@@ -185,7 +210,7 @@
         
         <!--    This input element is used to decide which response is the lie.    -->
         <label for="lie">Lie: </label>
-        <input id="lie" type="number" name="lie" min="0" max="3" step="1" /><br>
+        <input id="lie" type="number" name="lie" min="1" max="4" step="1" /><br>
         
       <input type="submit" value="Post Submission" />
     </form>
@@ -196,13 +221,14 @@
 <!--     these need to be changed, actually I don't think these are needed at all     -->
         <option value='/getUsers'>/getUsers</option>
         <option value='/notReal'>/notReal</option>
+          <option value='/getPosts'>/getPosts</option>
       </select>
 <!--    these need to be modified    -->
       <select id="methodSelect">
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
-      <input type="submit" value="Get User" />
+      <input type="submit" value="Get Post" />
     </form>
   </section>
   <section id="content">
