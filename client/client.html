@@ -179,6 +179,8 @@
         const img = document.querySelector('#previewImage');
         
         img.src = select.options[select.selectedIndex].value;
+        
+        return false;
     };
 
     const init = () => {
