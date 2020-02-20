@@ -35,7 +35,8 @@
         
      if(parseResponse){
         const obj = JSON.parse(xhr.response);
-        console.dir(obj);
+        console.log("in parseResponse");
+         console.dir(obj);
          
          // idk if I need this keep for now
         if(obj.message) {
@@ -51,6 +52,13 @@
             userList.textContent = users;
             content.appendChild(userList);
         }
+         
+         if(obj.posts){
+             const postList = document.createElement('p');
+             const post = JSON.stringify(obj.posts);
+             postList.textContent = post;
+             content.appendChild(postList);
+         }
         
      }else{
          // nothing happens here
@@ -113,8 +121,8 @@
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader ('Accept', 'application/json');
         
-        // handleResponse needs to be changed to accept any different parameters that I might need
-        xhr.onload = () => handleResponse(xhr, false);
+        // handleResponse needs to be changed to accept any different parameters that I might need, maybe not though who knows
+        xhr.onload = () => handleResponse(xhr, true);
         
         const formData = `name=${nameField.value}&resp1=${respFields[0].value}&resp2=${respFields[1].value}&resp3=${respFields[2].value}&resp4=${respFields[3].value}&lie=${lieSelector.value}`;
         xhr.send(formData);
@@ -156,24 +164,34 @@
         
         xhr.setRequestHeader('Accept', 'application/json');
         
-        xhr.onload = () => handleResponse(xhr);
+        xhr.onload = () => handleResponse(xhr, true);
         
         xhr.send();
         
         return false;
     };
 
+    const updateImage = (e, nameForm) => {
+        e.preventDefault();
+        
+        // add consts here to get image select value then update source
+    };
+
     const init = () => {
         const userForm = document.querySelector('#userForm');
         const nameForm = document.querySelector('#nameForm');
         
-        const getUsers = (e) => requestUpdate(e, userForm);
+        const getUsers = (e) => requestPosts(e, userForm);
         // const addUsers = (e) => sendPost(e, nameForm);
         const addPost = (e) => postSubmission(e, nameForm);
         
         userForm.addEventListener('submit', getUsers);
         // nameForm.addEventListener('submit', addUsers);
         nameForm.addEventListener('submit', addPost);
+        
+        const imageSelect = document.querySelector('#imageSelect');
+        
+        // const changeImage = (e) => 
         
     };
 
@@ -185,6 +203,9 @@
   <section id="top">
       <!--   change the h3 tag text, maybe have it change based on if the user is uploading stuff or playing the game?   -->
     <h3>POST Status Code Tests</h3>
+      
+      
+      
 <!--   This needs to be changed a bit, action needs to be changed to something else   -->
     <form id="nameForm" action="/addPost" method="post">
       <label for="name">Name: </label>
@@ -193,6 +214,13 @@
       <label for="age">Age: </label>
       <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
 -->
+        <img src="../media/bread.png"><br>
+        <label for="imageSelect">Image: </label>
+        <select id="imageSelect" name="imageSelect">
+            <option value="../media/bread.png">Bread</option>
+            <option value="../media/lamp.png">Lamp</option>
+        </select><br>
+        
         <!--    These input elements are the entry fields for the statements.    -->
         <label for="response1">Statement 1: </label>
         <input class="statementField" id="resp1" type="text" name="response1" /><br>
@@ -228,7 +256,7 @@
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
-      <input type="submit" value="Get Post" />
+      <input type="submit" value="Get Posts" />
     </form>
   </section>
   <section id="content">

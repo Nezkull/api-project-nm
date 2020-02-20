@@ -4,6 +4,7 @@ const query = require('querystring');
 
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
+const mediaHandler = require('./mediaResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -62,6 +63,10 @@ const handleGet = (request, response, parsedURL) => {
     jsonHandler.getUsers(request, response);
   } else if (parsedURL.pathname === '/notReal') {
     jsonHandler.notFound(request, response);
+  } else if(parsedURL.pathname === '/getPosts'){
+    jsonHandler.getPosts(request, response);        
+  } else if (parsedURL.pathname === '/media/bread.png'){
+    mediaHandler.getBread(request, response);  
   } else {
     jsonHandler.notFound(request, response);
   }

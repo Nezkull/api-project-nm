@@ -37,13 +37,15 @@ const getUsers = (request, response) => {
 
 
 // function that will get the posts from the server
-const getPosts = (request, response, param) => {
-  const respondJSON = {
+const getPosts = (request, response) => {
+  const responseJSON = {
     // photo, // the image id
     posts,
   };
     // this will probably need more work
 
+    console.dir(posts);
+    
   /*
     // check to see if parameter is set
     if(!param.id){
@@ -95,6 +97,7 @@ const addUser = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
+// this should be pretty much done
 const addPost = (request, response, body) => {
     const responseJSON = {
         message: 'Name, 4 statements, and lie selection are all required.',
@@ -105,7 +108,7 @@ const addPost = (request, response, body) => {
         return respondJSON(request, response, 400, responseJSON);
     }
     
-    let responseCode = 200;
+    let responseCode = 201;
     
     if(posts[body.name]){
         responseCode = 204;
@@ -113,7 +116,8 @@ const addPost = (request, response, body) => {
         posts[body.name] = {};
     }
     
-    posts[body.name].name = body.name;
+    // can use the name as a way to search for posts (query parameter)
+    // posts[body.name].name = body.name;
     posts[body.name].resp1 = body.resp1;
     posts[body.name].resp2 = body.resp2;
     posts[body.name].resp3 = body.resp3;
