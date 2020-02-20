@@ -66,7 +66,9 @@ const handleGet = (request, response, parsedURL) => {
   } else if(parsedURL.pathname === '/getPosts'){
     jsonHandler.getPosts(request, response);        
   } else if (parsedURL.pathname === '/media/bread.png'){
-    mediaHandler.getBread(request, response);  
+    mediaHandler.getThisBread(request, response);  
+  } else if(parsedURL.pathname === '/media/lamp.png'){
+    mediaHandler.getLamp(request, response);
   } else {
     jsonHandler.notFound(request, response);
   }
