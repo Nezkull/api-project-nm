@@ -6,6 +6,8 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+   
+    let play = false;
 
     const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
@@ -58,9 +60,37 @@
              const post = JSON.stringify(obj.posts);
              postList.textContent = post;
              content.appendChild(postList);
-             
+             /*
              // console.dir("resp1: " + obj.posts[0].resp1);
-             console.dir("resp1: " + post.resp1.value);
+             // console.dir("post: " + post[0]);
+             console.dir("Obj");
+             // console.dir(post[post.indexOf("Nick Marano")]);
+             // console.dir("resp1: " + post[0].resp1);
+             console.dir(JSON.stringify(obj.posts[0]));
+             // console.dir(obj.values());
+             console.dir(Object.values(obj));
+             
+             console.dir("log");
+             // obj.posts.key this format will allow me to get the specific content and split it up and change the stuff to play on screen
+             // console.dir(JSON.stringify(obj.posts.test));
+             
+             console.dir(obj.posts.test);
+             
+             const temp = obj.keys;
+             
+             console.log(obj.keys);
+             
+             console.dir("Temp");
+             
+             console.dir(temp);
+             console.dir("test");
+             console.dir(obj.posts[0]);
+             
+             
+             console.dir("test1");
+             // this is the way i should do it
+             console.dir(Object.keys(obj.posts));
+             */
          }
         
      }else{
@@ -69,6 +99,7 @@
     };
 
     // update this to have multiple text fields
+/*
     const sendPost = (e, nameForm) => {
       e.preventDefault();
         
@@ -94,7 +125,7 @@
     
       return false;
     }
-
+*/
     const postSubmission = (e, nameForm) => {
         e.preventDefault();
         
@@ -104,18 +135,12 @@
         // get the name
         const nameField = nameForm.querySelector('#nameField');
         
-        console.dir(nameField); // gives correct readout
-        
         // get an array of all of the text responses
         const respFields = nameForm.getElementsByClassName('statementField');
         
-        console.dir(respFields); // gives correct readouts
-        console.dir(respFields[2]); // gives correct readout
         // get the lie input selector
         const lieSelector = nameForm.querySelector('#lie');
     
-        console.dir(lieSelector); // gives correct readout
-        
         const xhr = new XMLHttpRequest();
         
         // nameMethod needs to be changed in the html tag to be addPost instead of addUser
@@ -132,6 +157,7 @@
     };
     
     // this needs much changing
+/*
     const requestUpdate = (e, userForm) => {
         e.preventDefault();
         
@@ -155,7 +181,9 @@
         
         return false;
     };
+*/
 
+    // either figure out a way to pass xhr to another function from here or modify this function more so that it pulls from the server and then posts the content into the fields or have the HEAD method be the version that pulls and allows the game to be played and then it can just be made the default
     const requestPosts = (e, userForm) => {
       e.preventDefault();
         
@@ -163,9 +191,33 @@
         const method = userForm.querySelector('#methodSelect').value;
         const xhr = new XMLHttpRequest();
         
+        // do seperation of gameplay and post reception here (this is a possible solution though probably not a good one);
+        /*
+        if(url === '/getPosts'){
+        
+            xhr.open(method, url);
+        
+        xhr.setRequestHeader('Accept', 'application/json');
+       
+        
+        xhr.onload = () => handleResponse(xhr, true);
+        
+        xhr.send();
+        }else{
+            // populate fields with game content and change attributes so that text fields become read-only, lie filed gets hidden, image src gchanges, and somehting else
+        }
+        */
+        
         xhr.open(method, url);
         
         xhr.setRequestHeader('Accept', 'application/json');
+        /*
+        if(method === 'get'){
+            xhr.onload = () => handleResponse(xhr, true);
+        }else{
+            xhr.onload = () => handleResponse(xhr, false);
+        }
+        */
         
         xhr.onload = () => handleResponse(xhr, true);
         
@@ -186,21 +238,29 @@
         return false;
     };
 
+// either make a seperate function that handles gameplay stuff
+    const populateGame = (e, nameForm) => {
+        e.preventDefault();
+        
+        const xhr = new XMLHttpRequest();
+        
+        
+        const obj = JSON.parse(xhr.response);
+        
+        return false;
+    };
+
     const init = () => {
         const userForm = document.querySelector('#userForm');
         const nameForm = document.querySelector('#nameForm');
-        
-        const getUsers = (e) => requestPosts(e, userForm);
-        // const addUsers = (e) => sendPost(e, nameForm);
-        const addPost = (e) => postSubmission(e, nameForm);
-        
-        userForm.addEventListener('submit', getUsers);
-        // nameForm.addEventListener('submit', addUsers);
-        nameForm.addEventListener('submit', addPost);
-        
         const imageSelect = document.querySelector('#imageSelect');
         
+        const getUsers = (e) => requestPosts(e, userForm);
+        const addPost = (e) => postSubmission(e, nameForm);
         const changeImage = (e) => updateImage(e, imageSelect);
+        
+        userForm.addEventListener('submit', getUsers);
+        nameForm.addEventListener('submit', addPost);
         imageSelect.addEventListener('change', changeImage);
     };
 
@@ -218,12 +278,12 @@
 <!--   This needs to be changed a bit, action needs to be changed to something else   -->
     <form id="nameForm" action="/addPost" method="post">
       <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name" /><br>
+      <input id="nameField" type="text" name="name" value="test" /><br>
 <!--
       <label for="age">Age: </label>
       <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
 -->
-        <img id="previewImage" src="../media/bread.png"><br>
+        <img id="previewImage" src="../media/bread.png" height="420" width="420"><br>
         <label for="imageSelect">Image: </label>
         <select id="imageSelect" name="imageSelect">
             <option value="../media/bread.png">Bread</option>
@@ -232,22 +292,22 @@
         
         <!--    These input elements are the entry fields for the statements.    -->
         <label for="response1">Statement 1: </label>
-        <input class="statementField" id="resp1" type="text" name="response1" /><br>
+        <input class="statementField" id="resp1" type="text" name="response1" value="true"/><br>
         
         <label for="response2">Statement 2: </label>
-        <input class="statementField" id="resp2" type="text" name="response2" /><br>
+        <input class="statementField" id="resp2" type="text" name="response2" value="true" /><br>
         
         <label for="response3">Statement 3: </label>
-        <input class="statementField" id="resp3" type="text" name="response3" /><br>
+        <input class="statementField" id="resp3" type="text" name="response3" value="true" /><br>
         
         <label for="response4">Statement 4: </label>
-        <input class="statementField" id="resp4" type="text" name="response4" /><br>
+        <input class="statementField" id="resp4" type="text" name="response4" value="false" /><br>
         
         <!--     class="statementField"    -->
         
         <!--    This input element is used to decide which response is the lie.    -->
         <label for="lie">Lie: </label>
-        <input id="lie" type="number" name="lie" min="1" max="4" step="1" /><br>
+        <input id="lie" type="number" name="lie" min="1" max="4" step="1" value="4" /><br>
         
       <input type="submit" value="Post Submission" />
     </form>
@@ -258,7 +318,8 @@
 <!--     these need to be changed, actually I don't think these are needed at all     -->
         <option value='/getUsers'>/getUsers</option>
         <option value='/notReal'>/notReal</option>
-          <option value='/getPosts'>/getPosts</option>
+          <option value='/getPosts' selected="selected">/getPosts</option>
+          <option value='/playGame'>/playGame</option>
       </select>
 <!--    these need to be modified    -->
       <select id="methodSelect">

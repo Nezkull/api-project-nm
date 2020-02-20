@@ -69,6 +69,10 @@ const getPosts = (request, response) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
+const playGame = (request, response) => {
+    
+};
+
 // I don't think I need to do XML or meta responses for this project
 const getUsersMeta = (request, response) => {
   respondJSONMeta(request, response, 200);
