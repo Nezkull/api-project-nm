@@ -45,13 +45,14 @@ const getPosts = (request, response) => {
     // this will probably need more work
 
     console.dir(posts);
+  /*
   console.log(posts[0].value);
   console.log(posts[0].resp1);
   console.log(posts[0].resp2);
   console.log(posts[0].resp3);
   console.log(posts[0].resp4);
   console.log(posts[0].lie);
-  
+  */
   
   /*
     // check to see if parameter is set
