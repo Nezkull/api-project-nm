@@ -171,10 +171,14 @@
         return false;
     };
 
-    const updateImage = (e, nameForm) => {
+    const updateImage = (e, select) => {
         e.preventDefault();
         
         // add consts here to get image select value then update source
+        // const select = document.querySelector('#imageSelect');
+        const img = document.querySelector('#previewImage');
+        
+        img.src = select.options[select.selectedIndex].value;
     };
 
     const init = () => {
@@ -191,8 +195,8 @@
         
         const imageSelect = document.querySelector('#imageSelect');
         
-        // const changeImage = (e) => 
-        
+        const changeImage = (e) => updateImage(e, imageSelect);
+        imageSelect.addEventListener('change', changeImage);
     };
 
     window.onload = init;
@@ -214,7 +218,7 @@
       <label for="age">Age: </label>
       <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
 -->
-        <img src="../media/bread.png"><br>
+        <img id="previewImage" src="../media/bread.png"><br>
         <label for="imageSelect">Image: </label>
         <select id="imageSelect" name="imageSelect">
             <option value="../media/bread.png">Bread</option>
