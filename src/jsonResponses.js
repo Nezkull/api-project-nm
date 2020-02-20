@@ -1,8 +1,9 @@
-// const users = {};
+const users = {};
 const posts = {};
 
 // make it an object of objects
 // an object that contains all of the images in the media folder
+/*
 const images = {
   bread: {
     id: 'bread',
@@ -14,6 +15,7 @@ const images = {
   },
 
 };
+*/
 
 const respondJSON = (request, response, status, obj) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
@@ -44,7 +46,7 @@ const getPosts = (request, response) => {
   };
     // this will probably need more work
 
-    console.dir(posts);
+  console.dir(posts);
   /*
   console.log(posts[0].value);
   console.log(posts[0].resp1);
@@ -53,7 +55,7 @@ const getPosts = (request, response) => {
   console.log(posts[0].resp4);
   console.log(posts[0].lie);
   */
-  
+
   /*
     // check to see if parameter is set
     if(!param.id){
@@ -69,9 +71,11 @@ const getPosts = (request, response) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
+/*
 const playGame = (request, response) => {
-    
+
 };
+*/
 
 // I don't think I need to do XML or meta responses for this project
 const getUsersMeta = (request, response) => {
@@ -79,7 +83,8 @@ const getUsersMeta = (request, response) => {
 };
 
 // copy and modify this to allow for multiple responses. Params: request, response, body.
-// body has .resp1, .resp2, .resp3, .resp4, and .lie. the .resp[n] are strings, .lie is an int that must be between 0 & 4.
+// body has .resp1, .resp2, .resp3, .resp4, and .lie. the .resp[n] are strings,
+// .lie is an int that must be between 0 & 4.
 const addUser = (request, response, body) => {
   const responseJSON = {
     message: 'Name and age are both required.',
@@ -111,39 +116,39 @@ const addUser = (request, response, body) => {
 
 // this should be pretty much done
 const addPost = (request, response, body) => {
-    const responseJSON = {
-        message: 'Name, 4 statements, and lie selection are all required.',
-    };
-    
-    if(!body.name || !body.resp1 || !body.resp2 || !body.resp3 || !body.resp4 || !body.lie){
-        responseJSON.id = 'missingParams';
-        return respondJSON(request, response, 400, responseJSON);
-    }
-    
-    let responseCode = 201;
-    
-    if(posts[body.name]){
-        responseCode = 204;
-    }else{
-        posts[body.name] = {};
-    }
-    
-    // can use the name as a way to search for posts (query parameter)
-    // posts[body.name].name = body.name;
-    posts[body.name].resp1 = body.resp1;
-    posts[body.name].resp2 = body.resp2;
-    posts[body.name].resp3 = body.resp3;
-    posts[body.name].resp4 = body.resp4;
-    posts[body.name].lie = body.lie;
-    // need image selector thing as well
-    
-    if(responseCode === 201){
-        responseJSON.message = 'Created Successfully';
-        return respondJSON(request, response, responseCode, responseJSON);
-    }
-    
-    return respondJSONMeta(request, response, responseCode);
-}
+  const responseJSON = {
+    message: 'Name, 4 statements, and lie selection are all required.',
+  };
+
+  if (!body.name || !body.resp1 || !body.resp2 || !body.resp3 || !body.resp4 || !body.lie) {
+    responseJSON.id = 'missingParams';
+    return respondJSON(request, response, 400, responseJSON);
+  }
+
+  let responseCode = 201;
+
+  if (posts[body.name]) {
+    responseCode = 204;
+  } else {
+    posts[body.name] = {};
+  }
+
+  // can use the name as a way to search for posts (query parameter)
+  // posts[body.name].name = body.name;
+  posts[body.name].resp1 = body.resp1;
+  posts[body.name].resp2 = body.resp2;
+  posts[body.name].resp3 = body.resp3;
+  posts[body.name].resp4 = body.resp4;
+  posts[body.name].lie = body.lie;
+  // need image selector thing as well
+
+  if (responseCode === 201) {
+    responseJSON.message = 'Created Successfully';
+    return respondJSON(request, response, responseCode, responseJSON);
+  }
+
+  return respondJSONMeta(request, response, responseCode);
+};
 
 // I might allow them to do this
 const updateUser = (request, response) => {
@@ -176,6 +181,6 @@ module.exports = {
   updateUser,
   notFound,
   notFoundMeta,
-    getPosts,
-    addPost,
+  getPosts,
+  addPost,
 };

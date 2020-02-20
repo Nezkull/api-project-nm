@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 const loadFile = (request, response, fileLoc, mimeType) => {
-    const file = path.resolve(__dirname, fileLoc);
-    
-    fs.stat(file, (err, stats) => {
+  const file = path.resolve(__dirname, fileLoc);
+
+  fs.stat(file, (err, stats) => {
     if (err) {
       if (err.code === 'ENOENT') {
         response.writeHead(404);
@@ -54,14 +54,14 @@ const loadFile = (request, response, fileLoc, mimeType) => {
 
 // Stephens idea, i swear
 const getThisBread = (request, response) => {
-    loadFile(request, response, '../media/bread.png', 'image/png');
+  loadFile(request, response, '../media/bread.png', 'image/png');
 };
 
 const getLamp = (request, response) => {
-    loadFile(request, response, '../media/lamp.png', 'image/png');
+  loadFile(request, response, '../media/lamp.png', 'image/png');
 };
 
-module.exports ={
-    getThisBread,
-    getLamp,
-}
+module.exports = {
+  getThisBread,
+  getLamp,
+};
