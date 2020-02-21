@@ -92,6 +92,10 @@
              // this is the way i should do it
              console.dir(Object.keys(obj.posts));
              */
+             console.dir(Object.keys(obj.posts));
+             const temp = Object.keys(obj.posts);
+             
+             console.dir(obj.posts[temp[0]]);
          }
         
      }else{
@@ -223,6 +227,9 @@
         }
         */
         
+        // maybe call setGame or something here
+        // will change the values of specific elements depending if the game is being played or if submission are being posted?
+        
         xhr.onload = () => handleResponse(xhr, true);
         
         xhr.send();
@@ -243,17 +250,53 @@
     };
 
 // either make a seperate function that handles gameplay stuff
-    const populateGame = (e, nameForm) => {
+// accepts both forms as parameters
+    const populateGame = (e, nameForm, userForm) => {
         e.preventDefault();
         
-        const xhr = new XMLHttpRequest();
+        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
+        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
+        const nameField = nameForm.querySelector('#nameField'); // set to read-only
+        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
+        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
+        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
+        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
         
+        const method = userForm.querySelector('#methodSelect').value;
+        const url = userForm.querySelector('#urlField').value;
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.setRequestHeader('Accept', 'application/json');
         
         const obj = JSON.parse(xhr.response);
+        
+        // this gets all of the keys (names) for all posts
+        const keys = Object.keys(obj.posts);
+        
+        lieSelect.style.visibility = 'hidden';
+        lieLabel.style.visibility = 'hidden';
+        nameField.readonly = true;
+        imageSelect.style.visibility = 'hidden';
+        imageLabel.style.visibility = 'hidden';
+        image.src = obj.posts[keys[0]].imageID.value; 
+        // should change the src of the preview image by reading the specific post by key
+        // then the it gets the imageID's value (which should be the file path to the image) and sets the previews src to it.
+        
+        for(let i = 0; i< responseFields.count; i++){
+            responseFields[i].readonly = true;
+            
+            // this might not work the way I want it to but who knows
+            responseFields[i].value = (obj.posts[keys[0]].resp + (i + 1)).value;
+        }
+        // this may not work like I want it to
+        nameField.value = obj.posts[keys[0]].value
+        
         
         return false;
     };
 
+// make another selector that allows the user to change between play/submit mode
     const init = () => {
         const userForm = document.querySelector('#userForm');
         const nameForm = document.querySelector('#nameForm');
@@ -288,29 +331,29 @@
       <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
 -->
         <img id="previewImage" src="../media/bread.png" height="420" width="420"><br>
-        <label for="imageSelect">Image: </label>
+        <label id="imageLabel" for="imageSelect">Image: </label>
         <select id="imageSelect" name="imageSelect">
             <option value="../media/bread.png">Bread</option>
             <option value="../media/lamp.png">Lamp</option>
         </select><br>
         
         <!--    These input elements are the entry fields for the statements.    -->
-        <label for="response1">Statement 1: </label>
+        <label class="statementLabel" for="response1">Statement 1: </label>
         <input class="statementField" id="resp1" type="text" name="response1" value="true"/><br>
         
-        <label for="response2">Statement 2: </label>
+        <label class="statementLabel" for="response2">Statement 2: </label>
         <input class="statementField" id="resp2" type="text" name="response2" value="true" /><br>
         
-        <label for="response3">Statement 3: </label>
+        <label class="statementLabel" for="response3">Statement 3: </label>
         <input class="statementField" id="resp3" type="text" name="response3" value="true" /><br>
         
-        <label for="response4">Statement 4: </label>
+        <label class="statementLabel" for="response4" disabled="true">Statement 4: </label>
         <input class="statementField" id="resp4" type="text" name="response4" value="false" /><br>
         
         <!--     class="statementField"    -->
         
         <!--    This input element is used to decide which response is the lie.    -->
-        <label for="lie">Lie: </label>
+        <label id="lieLabel" for="lie">Lie: </label>
         <input id="lie" type="number" name="lie" min="1" max="4" step="1" value="4" /><br>
         
       <input type="submit" value="Post Submission" />
