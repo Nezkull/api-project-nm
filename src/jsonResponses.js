@@ -117,10 +117,11 @@ const addUser = (request, response, body) => {
 // this should be pretty much done
 const addPost = (request, response, body) => {
   const responseJSON = {
-    message: 'Name, 4 statements, and lie selection are all required.',
+    message: 'Name, 4 statements, lie selection, and image selection are all required.',
   };
 
-  if (!body.name || !body.resp1 || !body.resp2 || !body.resp3 || !body.resp4 || !body.lie) {
+  if (!body.name || !body.resp1 || !body.resp2 || !body.resp3
+     || !body.resp4 || !body.lie || !body.imageID) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
@@ -140,6 +141,8 @@ const addPost = (request, response, body) => {
   posts[body.name].resp3 = body.resp3;
   posts[body.name].resp4 = body.resp4;
   posts[body.name].lie = body.lie;
+  posts[body.name].imageID = body.imageID;
+
   // need image selector thing as well
 
   if (responseCode === 201) {

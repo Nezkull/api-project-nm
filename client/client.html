@@ -55,6 +55,7 @@
             content.appendChild(userList);
         }
          
+         // parse content example is here
          if(obj.posts){
              const postList = document.createElement('p');
              const post = JSON.stringify(obj.posts);
@@ -140,6 +141,7 @@
         
         // get the lie input selector
         const lieSelector = nameForm.querySelector('#lie');
+        const imageSelector = nameForm.querySelector('#imageSelect');
     
         const xhr = new XMLHttpRequest();
         
@@ -152,7 +154,9 @@
         // handleResponse needs to be changed to accept any different parameters that I might need, maybe not though who knows
         xhr.onload = () => handleResponse(xhr, true);
         
-        const formData = `name=${nameField.value}&resp1=${respFields[0].value}&resp2=${respFields[1].value}&resp3=${respFields[2].value}&resp4=${respFields[3].value}&lie=${lieSelector.value}`;
+        // added selected image to formData url-encoding string, if this stuff breaks then thats why
+        const formData = `name=${nameField.value}&resp1=${respFields[0].value}&resp2=${respFields[1].value}&resp3=${respFields[2].value}&resp4=${respFields[3].value}&lie=${lieSelector.value}&imageID=${imageSelect.options[imageSelect.selectedIndex].value}`;
+        
         xhr.send(formData);
     };
     
