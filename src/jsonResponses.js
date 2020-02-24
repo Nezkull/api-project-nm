@@ -120,8 +120,8 @@ const addPost = (request, response, body) => {
     message: 'Name, 4 statements, lie selection, and image selection are all required.',
   };
 
-  if(!body.name || !body.resp1 || !body.resp2 || !body.resp3 
-     || !body.resp4 || !body.lie || !body.imageID){
+  if (!body.name || !body.resp1 || !body.resp2 || !body.resp3
+     || !body.resp4 || !body.lie || !body.imageID) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }

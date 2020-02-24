@@ -302,11 +302,13 @@
         const nameForm = document.querySelector('#nameForm');
         const imageSelect = document.querySelector('#imageSelect');
         
-        const getUsers = (e) => requestPosts(e, userForm);
+        // const getUsers = (e) => requestPosts(e, userForm);
+        const getPost = (e) => populateGame(e, nameForm, userForm);
         const addPost = (e) => postSubmission(e, nameForm);
         const changeImage = (e) => updateImage(e, imageSelect);
         
-        userForm.addEventListener('submit', getUsers);
+        // userForm.addEventListener('submit', getUsers);
+        userForm.addEventListener('submit', getPost);
         nameForm.addEventListener('submit', addPost);
         imageSelect.addEventListener('change', changeImage);
     };
