@@ -8,7 +8,7 @@
   <script type="text/babel">
    
     let play = false;
-
+    var tempArr = [];
     const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
       
@@ -37,6 +37,7 @@
         
      if(parseResponse){
         const obj = JSON.parse(xhr.response);
+         // temp = obj;
         console.log("in parseResponse");
          console.dir(obj);
          
@@ -57,6 +58,7 @@
          
          // parse content example is here
          if(obj.posts){
+             tempArr.push(obj);
              const postList = document.createElement('p');
              const post = JSON.stringify(obj.posts);
              postList.textContent = post;
@@ -92,14 +94,17 @@
              // this is the way i should do it
              console.dir(Object.keys(obj.posts));
              */
-             console.dir(Object.keys(obj.posts));
-             const temp = Object.keys(obj.posts);
+             // console.dir(Object.keys(obj.posts));
+             // const temp = Object.keys(obj.posts);
              
-             console.dir(obj.posts[temp[0]]);
+             // console.dir(obj.posts[temp[0]]);
          }
         
      }else{
-         // nothing happens here
+         const obj = JSON.parse(xhr.response);
+         // temp = obj;
+        console.log("in parseResponse else");
+         console.dir(obj);
      }
     };
 
@@ -192,43 +197,44 @@
 */
 
     // either figure out a way to pass xhr to another function from here or modify this function more so that it pulls from the server and then posts the content into the fields or have the HEAD method be the version that pulls and allows the game to be played and then it can just be made the default
-    const requestPosts = (e, userForm) => {
+    const requestPosts = (e, nameForm, userForm) => {
       e.preventDefault();
         
         const url = userForm.querySelector('#urlField').value;
         const method = userForm.querySelector('#methodSelect').value;
+        
+        
+        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
+        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
+        const nameField = nameForm.querySelector('#nameField'); // set to read-only
+        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
+        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
+        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
+        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
+        
+        
+        lieSelect.style.visibility = 'hidden';
+        lieLabel.style.visibility = 'hidden';
+        nameField.readOnly = true;
+        imageSelect.style.visibility = 'hidden';
+        imageLabel.style.visibility = 'hidden';
+        // image.src = obj.posts[keys[0]].imageID.value; 
+        
         const xhr = new XMLHttpRequest();
-        
-        // do seperation of gameplay and post reception here (this is a possible solution though probably not a good one);
-        /*
-        if(url === '/getPosts'){
-        
-            xhr.open(method, url);
-        
-        xhr.setRequestHeader('Accept', 'application/json');
-       
-        
-        xhr.onload = () => handleResponse(xhr, true);
-        
-        xhr.send();
-        }else{
-            // populate fields with game content and change attributes so that text fields become read-only, lie filed gets hidden, image src gchanges, and somehting else
-        }
-        */
         
         xhr.open(method, url);
         
         xhr.setRequestHeader('Accept', 'application/json');
-        /*
-        if(method === 'get'){
-            xhr.onload = () => handleResponse(xhr, true);
-        }else{
-            xhr.onload = () => handleResponse(xhr, false);
-        }
-        */
         
         // maybe call setGame or something here
         // will change the values of specific elements depending if the game is being played or if submission are being posted?
+        // console.log('before onload call in requestPosts');
+        // const temp = JSON.parse(xhr.response);
+        
+        // console.log('temp in requestPosts');
+        // console.dir(temp);
+        
+        
         
         xhr.onload = () => handleResponse(xhr, true);
         
@@ -273,7 +279,7 @@
         
         // this gets all of the keys (names) for all posts
         const keys = Object.keys(obj.posts);
-        
+        /*
         lieSelect.style.visibility = 'hidden';
         lieLabel.style.visibility = 'hidden';
         nameField.readonly = true;
@@ -292,7 +298,10 @@
         // this may not work like I want it to
         nameField.value = obj.posts[keys[0]].value
         
+        xhr.onload = () => handleResponse(xhr, false);
         
+        xhr.send();
+        */
         return false;
     };
 
@@ -303,7 +312,7 @@
         const imageSelect = document.querySelector('#imageSelect');
         
         // const getUsers = (e) => requestPosts(e, userForm);
-        const getPost = (e) => populateGame(e, nameForm, userForm);
+        const getPost = (e) => requestPosts(e, nameForm, userForm);
         const addPost = (e) => postSubmission(e, nameForm);
         const changeImage = (e) => updateImage(e, imageSelect);
         
