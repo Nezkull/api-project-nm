@@ -1,0 +1,8 @@
+Description
+The site allows users to upload 3 thruths and a lie to the server. By clicking the Get Posts button a random submission is selected from the server and loaded into the webpage's form and selection optionas are made visible. The user is now able to guess which of the 4 statesments is a lie. Guessing correctly will change the pages background to green while an incorrect guess will change the pages background to red. The user must enter 4 statements, a name, determine which statement is a lie, and select an image (this is option as the bread is selected by default) before they are able submit the post to the server.
+
+The API handles the submission and recieving of posts and portraying them to the webpage.
+
+What went right is that the webpoage works pretty much exactly as I had hoped for it to work. What went wrong is that I didn't get the HEAD request setup to work and the query parameters for pulling up specific posts by name isn't setup either.
+
+If I were to continue I would definately get the HEAD request and pulling specific posts from the server working. I would also get the restarting of the game working as well, for some reason it currently isn't working as it is supposed to.

@@ -7,8 +7,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
   
-    // new button that allows the user to reset the form so that they can enter more submissions
-
     const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
       
@@ -34,7 +32,6 @@
           break;
       }
 
-        
      if(parseResponse){
         const obj = JSON.parse(xhr.response);
          // temp = obj;
@@ -73,6 +70,7 @@
         
         const keys = Object.keys(obj.posts);
          
+         // from W3
          let t = Math.floor(Math.random() * keys.length);
          
         const userForm = document.querySelector('#userForm');
@@ -131,45 +129,6 @@
         }
      }
     };
-
-    // doesn't work for some reason
-    // function that resets the page so that the more content can be submitted
-    const restartGame = (e, nameForm, userForm) => {
-        e.preventDefault();
-        
-        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
-        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
-        const nameField = nameForm.querySelector('#nameField'); // set to read-only
-        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
-        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
-        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
-        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
-        const lieCheckBoxes = nameForm.getElementsByClassName('lieSelect');
-         
-        lieSelect.style.visibility = 'visible';
-        lieLabel.style.visibility = 'visible';
-        nameField.readOnly = false;
-        imageSelect.style.visibility = 'visible';
-        imageLabel.style.visibility = 'visible';
-        image.src = '../media/bread.png';
-         
-        // make it work first
-        for(let i = 0; i< responseFields.length; i++){
-            responseFields[i].readOnly = false;
-            lieCheckBoxes[i].style.visibility = 'hidden';
-        }
-         
-        // populating the responses with the posts responses
-        responseFields[0].value = '';
-        responseFields[1].value = '';
-        responseFields[2].value = '';
-        responseFields[3].value = '';
-         
-        // filling the name field with name from server
-        nameField.value = '';
-        
-        return false;
-    }; 
 
     const postSubmission = (e, nameForm) => {
         e.preventDefault();
@@ -235,14 +194,52 @@
         return false;
     };
 
+    // function that resets the page so that the more content can be submitted
+    const restartGame = (e, nameForm, userForm) => {
+        e.preventDefault();
+        
+        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
+        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
+        const nameField = nameForm.querySelector('#nameField'); // set to read-only
+        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
+        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
+        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
+        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
+        const lieCheckBoxes = nameForm.getElementsByClassName('lieSelect');
+         
+        lieSelect.style.visibility = 'visible';
+        lieLabel.style.visibility = 'visible';
+        nameField.readOnly = false;
+        imageSelect.style.visibility = 'visible';
+        imageLabel.style.visibility = 'visible';
+        image.src = '../media/bread.png';
+        /* 
+        // make it work first
+        for(let i = 0; i< responseFields.length; i++){
+            responseFields[i].readOnly = false;
+            lieCheckBoxes[i].style.visibility = 'hidden';
+        }
+         
+        // populating the responses with the posts responses
+        responseFields[0].value = '';
+        responseFields[1].value = '';
+        responseFields[2].value = '';
+        responseFields[3].value = '';
+         
+        // filling the name field with name from server
+        nameField.value = '';
+        */
+        return false;
+    };
+
 // make another selector that allows the user to change between play/submit mode
     const init = () => {
         const userForm = document.querySelector('#userForm');
         const nameForm = document.querySelector('#nameForm');
         const imageSelect = document.querySelector('#imageSelect');
-        // const restart = document.querySelector('#restart');
+        const restart = document.querySelector('#restart');
         
-        // const restartPage = (e) => restartGame(e, nameForm, userForm);
+        const restartPage = (e) => restartGame(e, nameForm, userForm);
         const getPost = (e) => requestPosts(e, userForm);
         const addPost = (e) => postSubmission(e, nameForm);
         const changeImage = (e) => updateImage(e, imageSelect);
@@ -260,19 +257,14 @@
 </head>
 <body>
   <section id="top">
-      <!--   change the h3 tag text, maybe have it change based on if the user is uploading stuff or playing the game?   -->
+
     <h3>3 Truths and a Lie</h3>
-      
-      
       
 <!--   This needs to be changed a bit, action needs to be changed to something else   -->
     <form id="nameForm" action="/addPost" method="post">
       <label for="name">Name: </label>
-      <input id="nameField" type="text" name="name" value="test" /><br>
-<!--
-      <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
--->
+      <input id="nameField" type="text" name="name"/><br>
+
         <img id="previewImage" src="../media/bread.png" height="420" width="420"><br>
         <label id="imageLabel" for="imageSelect">Image: </label>
         <select id="imageSelect" name="imageSelect">
@@ -282,22 +274,20 @@
         
         <!--    These input elements are the entry fields for the statements.    -->
         <label class="statementLabel" for="response1">Statement 1: </label>
-        <input class="statementField" id="resp1" type="text" name="response1" value="true"/><input type="checkbox" id="1" class="lieSelect"/><br>
+        <input class="statementField" id="resp1" type="text" name="response1"/><input type="checkbox" id="1" class="lieSelect"/><br>
         
         <label class="statementLabel" for="response2">Statement 2: </label>
-        <input class="statementField" id="resp2" type="text" name="response2" value="true" /><input type="checkbox" id="2" class="lieSelect"/><br>
+        <input class="statementField" id="resp2" type="text" name="response2"/><input type="checkbox" id="2" class="lieSelect"/><br>
         
         <label class="statementLabel" for="response3">Statement 3: </label>
-        <input class="statementField" id="resp3" type="text" name="response3" value="true" /><input type="checkbox" id="3" class="lieSelect"/><br>
+        <input class="statementField" id="resp3" type="text" name="response3"/><input type="checkbox" id="3" class="lieSelect"/><br>
         
         <label class="statementLabel" for="response4">Statement 4: </label>
-        <input class="statementField" id="resp4" type="text" name="response4" value="false" /><input type="checkbox" id="4" class="lieSelect"/><br>
-        
-        <!--     class="statementField"    -->
+        <input class="statementField" id="resp4" type="text" name="response4"/><input type="checkbox" id="4" class="lieSelect"/><br>
         
         <!--    This input element is used to decide which response is the lie.    -->
         <label id="lieLabel" for="lie">Lie: </label>
-        <input id="lie" type="number" name="lie" min="1" max="4" step="1" value="4" /><br>
+        <input id="lie" type="number" name="lie" min="1" max="4" step="1"/><br>
         
       <input type="submit" value="Post Submission" />
     </form>
@@ -306,10 +296,10 @@
     <form id="userForm" action="/getUsers" method="get">
       <select id='urlField'>
 <!--     these need to be changed, actually I don't think these are needed at all     -->
-        <option value='/getUsers'>/getUsers</option>
+<!--        <option value='/getUsers'>/getUsers</option>-->
         <option value='/notReal'>/notReal</option>
           <option value='/getPosts' selected="selected">/getPosts</option>
-          <option value='/playGame'>/playGame</option>
+<!--          <option value='/playGame'>/playGame</option>-->
       </select>
 <!--    these need to be modified    -->
       <select id="methodSelect">
@@ -317,7 +307,7 @@
         <option value="head">HEAD</option>
       </select>
       <input type="submit" value="Get Posts" /><br>
-<!--      <input type="submit" value="Restart" id="restart" />-->
+      <input type="submit" value="Restart" id="restart" />
     </form>
   </section>
   <section id="content">
