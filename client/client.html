@@ -6,9 +6,9 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
-   
-    let play = false;
-    var tempArr = [];
+  
+    // new button that allows the user to reset the form so that they can enter more submissions
+
     const handleResponse = (xhr, parseResponse) => {
       const content = document.querySelector('#content');
       
@@ -63,79 +63,114 @@
              const post = JSON.stringify(obj.posts);
              postList.textContent = post;
              content.appendChild(postList);
-             /*
-             // console.dir("resp1: " + obj.posts[0].resp1);
-             // console.dir("post: " + post[0]);
-             console.dir("Obj");
-             // console.dir(post[post.indexOf("Nick Marano")]);
-             // console.dir("resp1: " + post[0].resp1);
-             console.dir(JSON.stringify(obj.posts[0]));
-             // console.dir(obj.values());
-             console.dir(Object.values(obj));
              
-             console.dir("log");
-             // obj.posts.key this format will allow me to get the specific content and split it up and change the stuff to play on screen
-             // console.dir(JSON.stringify(obj.posts.test));
-             
-             console.dir(obj.posts.test);
-             
-             const temp = obj.keys;
-             
-             console.log(obj.keys);
-             
-             console.dir("Temp");
-             
-             console.dir(temp);
-             console.dir("test");
-             console.dir(obj.posts[0]);
-             
-             
-             console.dir("test1");
-             // this is the way i should do it
-             console.dir(Object.keys(obj.posts));
-             */
-             // console.dir(Object.keys(obj.posts));
-             // const temp = Object.keys(obj.posts);
-             
-             // console.dir(obj.posts[temp[0]]);
          }
         
      }else{
-         const obj = JSON.parse(xhr.response);
-         // temp = obj;
+        const obj = JSON.parse(xhr.response);
         console.log("in parseResponse else");
-         console.dir(obj);
+        console.dir(obj);
+        
+        const keys = Object.keys(obj.posts);
+         
+         let t = Math.floor(Math.random() * keys.length);
+         
+        const userForm = document.querySelector('#userForm');
+        const nameForm = document.querySelector('#nameForm');
+         
+        const background = document.getElementsByTagName('body');
+         
+        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
+        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
+        const nameField = nameForm.querySelector('#nameField'); // set to read-only
+        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
+        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
+        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
+        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
+        const lieCheckBoxes = nameForm.getElementsByClassName('lieSelect');
+         
+        lieSelect.style.visibility = 'hidden';
+        lieLabel.style.visibility = 'hidden';
+        nameField.readOnly = true;
+        imageSelect.style.visibility = 'hidden';
+        imageLabel.style.visibility = 'hidden';
+        image.src = obj.posts[keys[t]].imageID;
+        // console.dir(responseFields);
+         
+        // make it work first
+        for(let i = 0; i< responseFields.length; i++){
+            responseFields[i].readOnly = true;
+            lieCheckBoxes[i].style.visibility = 'visible';
+            // this might not work the way I want it to but who knows
+            // responseFields[i].value = (obj.posts[keys[0]].resp + (i + 1)).value;
+        }
+         
+        // populating the responses with the posts responses
+        responseFields[0].value = obj.posts[keys[t]].resp0;
+        responseFields[1].value = obj.posts[keys[t]].resp1;
+        responseFields[2].value = obj.posts[keys[t]].resp2;
+        responseFields[3].value = obj.posts[keys[t]].resp3;
+         
+        // filling the name field with name from server
+        nameField.value = keys[t];
+         
+        // make this work with event listeners
+         
+        for(let i = 0; i < lieCheckBoxes.length; i++){
+            lieCheckBoxes[i].addEventListener('change', function(e) {
+                if(obj.posts[keys[t]].lie === lieCheckBoxes[i].id){
+                // correct
+                console.log('correct');
+                document.body.style.backgroundColor = "green";
+            }else{
+                // wrong
+                console.log('wrong');
+                document.body.style.backgroundColor = "red";
+            }
+            });
+        }
      }
     };
 
-    // update this to have multiple text fields
-/*
-    const sendPost = (e, nameForm) => {
-      e.preventDefault();
+    // doesn't work for some reason
+    // function that resets the page so that the more content can be submitted
+    const restartGame = (e, nameForm, userForm) => {
+        e.preventDefault();
         
-        // these might be needed
-      const nameAction = nameForm.getAttribute('action');
-      const nameMethod = nameForm.getAttribute('method');
-      
-      const nameField = nameForm.querySelector('#nameField'); // need this
-      const ageField = nameForm.querySelector('#ageField'); // dont need this here
-      
-      const xhr = new XMLHttpRequest();
+        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
+        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
+        const nameField = nameForm.querySelector('#nameField'); // set to read-only
+        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
+        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
+        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
+        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
+        const lieCheckBoxes = nameForm.getElementsByClassName('lieSelect');
+         
+        lieSelect.style.visibility = 'visible';
+        lieLabel.style.visibility = 'visible';
+        nameField.readOnly = false;
+        imageSelect.style.visibility = 'visible';
+        imageLabel.style.visibility = 'visible';
+        image.src = '../media/bread.png';
+         
+        // make it work first
+        for(let i = 0; i< responseFields.length; i++){
+            responseFields[i].readOnly = false;
+            lieCheckBoxes[i].style.visibility = 'hidden';
+        }
+         
+        // populating the responses with the posts responses
+        responseFields[0].value = '';
+        responseFields[1].value = '';
+        responseFields[2].value = '';
+        responseFields[3].value = '';
+         
+        // filling the name field with name from server
+        nameField.value = '';
         
-      xhr.open(nameMethod, nameAction);
-      
-      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.setRequestHeader ('Accept', 'application/json');
-      
-      xhr.onload = () => handleResponse(xhr, true);
-      
-      const formData = `name=${nameField.value}&age=${ageField.value}`;
-      
-      xhr.send(formData);
-    
-      return false;
-    }
-*/
+        return false;
+    }; 
+
     const postSubmission = (e, nameForm) => {
         e.preventDefault();
         
@@ -164,79 +199,24 @@
         xhr.onload = () => handleResponse(xhr, true);
         
         // added selected image to formData url-encoding string, if this stuff breaks then thats why
-        const formData = `name=${nameField.value}&resp1=${respFields[0].value}&resp2=${respFields[1].value}&resp3=${respFields[2].value}&resp4=${respFields[3].value}&lie=${lieSelector.value}&imageID=${imageSelect.options[imageSelect.selectedIndex].value}`;
+        const formData = `name=${nameField.value}&resp0=${respFields[0].value}&resp1=${respFields[1].value}&resp2=${respFields[2].value}&resp3=${respFields[3].value}&lie=${lieSelector.value}&imageID=${imageSelect.options[imageSelect.selectedIndex].value}`;
         
         xhr.send(formData);
     };
-    
-    // this needs much changing
-/*
-    const requestUpdate = (e, userForm) => {
-        e.preventDefault();
-        
-        const url = userForm.querySelector('#urlField').value;
-        
-        const method = userForm.querySelector('#methodSelect').value;
-        
-        const xhr = new XMLHttpRequest();
-        
-        xhr.open(method, url);
-        
-        xhr.setRequestHeader('Accept', 'application/json');
-        
-        if(method == 'get'){
-            xhr.onload = () => handleResponse(xhr, true);
-        }else{
-            xhr.onload = () => handleResponse(xhr, false);
-        }
-        
-        xhr.send();
-        
-        return false;
-    };
-*/
 
-    // either figure out a way to pass xhr to another function from here or modify this function more so that it pulls from the server and then posts the content into the fields or have the HEAD method be the version that pulls and allows the game to be played and then it can just be made the default
-    const requestPosts = (e, nameForm, userForm) => {
+    const requestPosts = (e, userForm) => {
       e.preventDefault();
         
         const url = userForm.querySelector('#urlField').value;
         const method = userForm.querySelector('#methodSelect').value;
         
-        
-        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
-        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
-        const nameField = nameForm.querySelector('#nameField'); // set to read-only
-        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
-        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
-        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
-        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
-        
-        
-        lieSelect.style.visibility = 'hidden';
-        lieLabel.style.visibility = 'hidden';
-        nameField.readOnly = true;
-        imageSelect.style.visibility = 'hidden';
-        imageLabel.style.visibility = 'hidden';
-        // image.src = obj.posts[keys[0]].imageID.value; 
-        
         const xhr = new XMLHttpRequest();
         
         xhr.open(method, url);
         
         xhr.setRequestHeader('Accept', 'application/json');
         
-        // maybe call setGame or something here
-        // will change the values of specific elements depending if the game is being played or if submission are being posted?
-        // console.log('before onload call in requestPosts');
-        // const temp = JSON.parse(xhr.response);
-        
-        // console.log('temp in requestPosts');
-        // console.dir(temp);
-        
-        
-        
-        xhr.onload = () => handleResponse(xhr, true);
+        xhr.onload = () => handleResponse(xhr, false);
         
         xhr.send();
         
@@ -255,64 +235,15 @@
         return false;
     };
 
-// either make a seperate function that handles gameplay stuff
-// accepts both forms as parameters
-    const populateGame = (e, nameForm, userForm) => {
-        e.preventDefault();
-        
-        const lieSelect = nameForm.querySelector('#lie'); // disable and hide
-        const lieLabel = nameForm.querySelector('#lieLabel'); // disable and hide
-        const nameField = nameForm.querySelector('#nameField'); // set to read-only
-        const imageLabel = nameForm.querySelector('#imageLabel'); // disable and hide
-        const imageSelect = nameForm.querySelector('#imageSelect'); // disable and hide
-        const responseFields = nameForm.getElementsByClassName('statementField'); // set all to read-only
-        const image = nameForm.querySelector('#previewImage'); // only src gets changed for this
-        
-        const method = userForm.querySelector('#methodSelect').value;
-        const url = userForm.querySelector('#urlField').value;
-        
-        const xhr = new XMLHttpRequest();
-        xhr.open(method, url);
-        xhr.setRequestHeader('Accept', 'application/json');
-        
-        const obj = JSON.parse(xhr.response);
-        
-        // this gets all of the keys (names) for all posts
-        const keys = Object.keys(obj.posts);
-        /*
-        lieSelect.style.visibility = 'hidden';
-        lieLabel.style.visibility = 'hidden';
-        nameField.readonly = true;
-        imageSelect.style.visibility = 'hidden';
-        imageLabel.style.visibility = 'hidden';
-        image.src = obj.posts[keys[0]].imageID.value; 
-        // should change the src of the preview image by reading the specific post by key
-        // then the it gets the imageID's value (which should be the file path to the image) and sets the previews src to it.
-        
-        for(let i = 0; i< responseFields.count; i++){
-            responseFields[i].readonly = true;
-            
-            // this might not work the way I want it to but who knows
-            responseFields[i].value = (obj.posts[keys[0]].resp + (i + 1)).value;
-        }
-        // this may not work like I want it to
-        nameField.value = obj.posts[keys[0]].value
-        
-        xhr.onload = () => handleResponse(xhr, false);
-        
-        xhr.send();
-        */
-        return false;
-    };
-
 // make another selector that allows the user to change between play/submit mode
     const init = () => {
         const userForm = document.querySelector('#userForm');
         const nameForm = document.querySelector('#nameForm');
         const imageSelect = document.querySelector('#imageSelect');
+        // const restart = document.querySelector('#restart');
         
-        // const getUsers = (e) => requestPosts(e, userForm);
-        const getPost = (e) => requestPosts(e, nameForm, userForm);
+        // const restartPage = (e) => restartGame(e, nameForm, userForm);
+        const getPost = (e) => requestPosts(e, userForm);
         const addPost = (e) => postSubmission(e, nameForm);
         const changeImage = (e) => updateImage(e, imageSelect);
         
@@ -320,6 +251,7 @@
         userForm.addEventListener('submit', getPost);
         nameForm.addEventListener('submit', addPost);
         imageSelect.addEventListener('change', changeImage);
+        // restart.addEventListener('submit', restartPage);
     };
 
     window.onload = init;
@@ -350,16 +282,16 @@
         
         <!--    These input elements are the entry fields for the statements.    -->
         <label class="statementLabel" for="response1">Statement 1: </label>
-        <input class="statementField" id="resp1" type="text" name="response1" value="true"/><br>
+        <input class="statementField" id="resp1" type="text" name="response1" value="true"/><input type="checkbox" id="1" class="lieSelect"/><br>
         
         <label class="statementLabel" for="response2">Statement 2: </label>
-        <input class="statementField" id="resp2" type="text" name="response2" value="true" /><br>
+        <input class="statementField" id="resp2" type="text" name="response2" value="true" /><input type="checkbox" id="2" class="lieSelect"/><br>
         
         <label class="statementLabel" for="response3">Statement 3: </label>
-        <input class="statementField" id="resp3" type="text" name="response3" value="true" /><br>
+        <input class="statementField" id="resp3" type="text" name="response3" value="true" /><input type="checkbox" id="3" class="lieSelect"/><br>
         
-        <label class="statementLabel" for="response4" disabled="true">Statement 4: </label>
-        <input class="statementField" id="resp4" type="text" name="response4" value="false" /><br>
+        <label class="statementLabel" for="response4">Statement 4: </label>
+        <input class="statementField" id="resp4" type="text" name="response4" value="false" /><input type="checkbox" id="4" class="lieSelect"/><br>
         
         <!--     class="statementField"    -->
         
@@ -384,7 +316,8 @@
         <option value="get">GET</option>
         <option value="head">HEAD</option>
       </select>
-      <input type="submit" value="Get Posts" />
+      <input type="submit" value="Get Posts" /><br>
+<!--      <input type="submit" value="Restart" id="restart" />-->
     </form>
   </section>
   <section id="content">

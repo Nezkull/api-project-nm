@@ -120,8 +120,8 @@ const addPost = (request, response, body) => {
     message: 'Name, 4 statements, lie selection, and image selection are all required.',
   };
 
-  if (!body.name || !body.resp1 || !body.resp2 || !body.resp3
-     || !body.resp4 || !body.lie || !body.imageID) {
+  if (!body.name || !body.resp0 || !body.resp1 || !body.resp2
+     || !body.resp3 || !body.lie || !body.imageID) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
@@ -135,15 +135,12 @@ const addPost = (request, response, body) => {
   }
 
   // can use the name as a way to search for posts (query parameter)
-  // posts[body.name].name = body.name;
+  posts[body.name].resp0 = body.resp0;
   posts[body.name].resp1 = body.resp1;
   posts[body.name].resp2 = body.resp2;
   posts[body.name].resp3 = body.resp3;
-  posts[body.name].resp4 = body.resp4;
   posts[body.name].lie = body.lie;
   posts[body.name].imageID = body.imageID;
-
-  // need image selector thing as well
 
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';

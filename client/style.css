@@ -40,3 +40,6 @@ input[type=text]{
 /* margin-right: 600px;   */
 }
 
+.lieSelect{
+    visibility: hidden;
+}
