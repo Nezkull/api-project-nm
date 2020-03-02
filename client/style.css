@@ -3,6 +3,7 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
+    background-color: beige;
 }
 
 #top {
@@ -20,10 +21,16 @@ html, body {
   text-align: center;
 }
 
-input[type=text]{
+input[type=text], input[type=number], select{
     padding: 2px;
     margin: 8px;
+    background-color:antiquewhite; 
 }
+
+input[type=submit]{
+    background-color:blanchedalmond;
+}
+
 .statementField {
     width: 40%;
 /*    text-align: center;*/
